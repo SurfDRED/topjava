@@ -2,8 +2,8 @@ package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.service.MealService;
-import ru.javawebinar.topjava.service.Service;
+import ru.javawebinar.topjava.repository.DataMealRepository;
+import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import javax.servlet.ServletException;
@@ -21,35 +21,36 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class MealServlet extends HttpServlet {
     private static final int CALORIES_PER_DAY = 2000;
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-    private static final Service service = new MealService();
+    private static final MealRepository MEAL_REPOSITORY = new DataMealRepository();
     private static final Logger log = getLogger(MealServlet.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = String.valueOf(request.getParameter("action"));
-
-        if (action.equals("null")) {
-            request.setAttribute("meals",
-                    MealsUtil.filteredByStreams(service.getListAllMeal(), LocalTime.MIN, LocalTime.MAX, CALORIES_PER_DAY));
-            request.setAttribute("formatter", FORMATTER);
-            log.debug("Show all meals");
-            request.getRequestDispatcher("meals.jsp").forward(request, response);
-            return;
-        }
         String id = request.getParameter("id");
         switch (action) {
             case "delete":
-                service.deleteMeal(Integer.parseInt(id));
+                MEAL_REPOSITORY.deleteMeal(Integer.parseInt(id));
                 log.debug("delete meal:{}", id);
                 response.sendRedirect("meals");
                 break;
             case "add":
+                Meal meal = new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 0);
+                log.debug("Add new meal");
+                request.setAttribute("meal", meal);
+                request.getRequestDispatcher("/mealEdit.jsp").forward(request, response);
+                break;
             case "update":
-                Meal meal = ((id == null) ? new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 0) : service.getMeal(Integer.parseInt(id)));
+                meal = MEAL_REPOSITORY.getMeal(Integer.parseInt(id));
                 log.debug("Update meal:{}", id);
                 request.setAttribute("meal", meal);
                 request.getRequestDispatcher("/mealEdit.jsp").forward(request, response);
                 break;
+            default:
+                request.setAttribute("meals",
+                        MealsUtil.filteredByStreams(MEAL_REPOSITORY.getListAllMeal(), LocalTime.MIN, LocalTime.MAX, CALORIES_PER_DAY));
+                log.debug("Show all meals");
+                request.getRequestDispatcher("meals.jsp").forward(request, response);
         }
     }
 
@@ -61,13 +62,13 @@ public class MealServlet extends HttpServlet {
                 req.getParameter("description"),
                 Integer.parseInt(req.getParameter("calories")));
         String id = req.getParameter("id");
-        if (Boolean.parseBoolean(req.getParameter("isNewMeal"))) {
-            service.addMeal(meal);
-            log.debug("add meal:{}", meal.getId());
+        if (id.isEmpty()) {
+            MEAL_REPOSITORY.addMeal(meal);
+            log.debug("Add new meal");
         } else {
             meal.setId(Integer.parseInt(id));
-            service.updateMeal(meal);
-            log.debug("update meal:{}", meal.getId());
+            MEAL_REPOSITORY.updateMeal(meal);
+            log.debug("Update meal:{}", meal.getId());
         }
         resp.sendRedirect("meals");
     }

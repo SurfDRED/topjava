@@ -1,4 +1,4 @@
-package ru.javawebinar.topjava.service;
+package ru.javawebinar.topjava.repository;
 
 import ru.javawebinar.topjava.model.Meal;
 
@@ -11,11 +11,11 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class MealService implements Service {
+public class DataMealRepository implements MealRepository {
     private final AtomicInteger id = new AtomicInteger(0);
     private final Map<Integer, Meal> meals;
 
-    public MealService() {
+    public DataMealRepository() {
         meals = new ConcurrentHashMap<>();
         Arrays.asList(
                 new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак", 500),
@@ -34,14 +34,14 @@ public class MealService implements Service {
     }
 
     @Override
-    public void updateMeal(Meal meal) {
-        meals.replace(meal.getId(), meal);
+    public Meal updateMeal(Meal meal) {
+        return meals.replace(meal.getId(), meal);
     }
 
     @Override
-    public void addMeal(Meal meal) {
+    public Meal addMeal(Meal meal) {
         meal.setId(id.getAndIncrement());
-        meals.put(meal.getId(), meal);
+        return meals.put(meal.getId(), meal);
     }
 
     @Override

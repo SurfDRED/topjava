@@ -1,15 +1,15 @@
-package ru.javawebinar.topjava.service;
+package ru.javawebinar.topjava.repository;
 
 import ru.javawebinar.topjava.model.Meal;
 
 import java.util.List;
 
-public interface Service {
+public interface MealRepository {
     List<Meal> getListAllMeal();
 
-    void updateMeal(Meal meal);
+    Meal updateMeal(Meal meal);
 
-    void addMeal(Meal meal);
+    Meal addMeal(Meal meal);
 
     Meal getMeal(int id);
 
