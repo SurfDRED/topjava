@@ -14,7 +14,7 @@
 
 <form method="post" action="meals">
     <input name="id" type="hidden" value="${meal.id}">
-    <input name="isNewMeal" type="hidden" value="${meal.isNew()}">
+    <input name="isNew" type="hidden" value="${meal.isNew()}">
     <table>
         <tr>
             <td>Date time:</td>
