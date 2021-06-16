@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://topjava.javawebinar.ru/functions" %>
@@ -13,33 +13,47 @@
         .excess {
             color: red;
         }
-        .btn {
-            margin-top: 10px;
+        .row {
+            display: flex;
+        }
+        .col {
+            display: flex;
+            flex-direction: column;
+            padding-right: 20px;
+        }
+        .buttons {
+            padding: 15px 0;
         }
     </style>
 </head>
 <body>
 <section>
-    <h3><a href="index.html">Home</a></h3>
+    <h3><a href="index.jsp">Home</a></h3>
     <hr/>
     <h2>Meals</h2>
-    <form method="GET" action='meals'>
+    <form method="get" action="meals" id="filter">
         <input type="hidden" name="action" value="filter">
-        <table border="1" cellpadding="8" cellspacing="0">
-            <tr>
-                <td>From date</td>
-                <td>To date</td>
-                <td>From time</td>
-                <td>To time</td>
-            </tr>
-            <tr>
-                <td><input type="date" name="fromDate" value=""></td>
-                <td><input type="date" name="toDate" value=""></td>
-                <td><input type="time" name="fromTime" value=""></td>
-                <td><input type="time" name="toTime" value=""></td>
-            </tr>
-        </table>
-        <button type="submit" class="btn">Filter</button>
+        <div class="row">
+            <div class="col">
+                <label for="startDate">От даты (включая)</label>
+                <input type="date" name="startDate" id="startDate" autocomplete="off" value="${param.startDate}">
+            </div>
+            <div class="col">
+                <label for="endDate">До даты (включая)</label>
+                <input type="date" name="endDate" id="endDate" autocomplete="off" value="${param.endDate}">
+            </div>
+            <div class="col">
+                <label for="startTime">От времени (включая)</label>
+                <input type="time" name="startTime" id="startTime" autocomplete="off" value="${param.startTime}">
+            </div>
+            <div class="col">
+                <label for="endTime">До времени (исключая)</label>
+                <input type="time" name="endTime" id="endTime" autocomplete="off" value="${param.endTime}">
+            </div>
+        </div>
+        <div class="buttons">
+            <button type="submit">Filter</button>
+        </div>
     </form>
     <a href="meals?action=create">Add Meal</a>
     <br><br>
