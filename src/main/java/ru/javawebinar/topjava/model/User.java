@@ -10,17 +10,11 @@ import java.util.Set;
 import static ru.javawebinar.topjava.util.MealsUtil.DEFAULT_CALORIES_PER_DAY;
 
 public class User extends AbstractNamedEntity {
-
     private String email;
-
     private String password;
-
     private boolean enabled = true;
-
     private Date registered = new Date();
-
     private Set<Role> roles;
-
     private int caloriesPerDay = DEFAULT_CALORIES_PER_DAY;
 
     public User() {
@@ -50,6 +44,10 @@ public class User extends AbstractNamedEntity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public void setPassword(String password) {
@@ -82,10 +80,6 @@ public class User extends AbstractNamedEntity {
 
     public Set<Role> getRoles() {
         return roles;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public void setRoles(Collection<Role> roles) {
