@@ -1,5 +1,5 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/1f89b34b98a546319d8645a09f497014)](https://www.codacy.com/gh/SurfDRED/topjava/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=SurfDRED/topjava&amp;utm_campaign=Badge_Grade)
-[![Build Status](https://travis-ci.com/SurfDRED/topjava.svg?branch=master)](https://travis-ci.com/SurfDRED/topjava)
+[![Build Status](https://travis-ci.com/SurfDRED/topjava.svg?branch=HW4)](https://travis-ci.com/SurfDRED/topjava)
 
 Java Enterprise Online Project 
 ===============================
